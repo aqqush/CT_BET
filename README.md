@@ -14,7 +14,8 @@ In order to extract brain from a CT head image.
 5) run unet_CT_SS.py
 
 Please contact me if you have any difficulty in running this code.
-akkus.zeynettin@mayo.edu
+
+Email: akkus.zeynettin@mayo.edu
 
 Zeynettin Akkus
 
