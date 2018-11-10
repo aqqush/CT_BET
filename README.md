@@ -17,3 +17,5 @@ Please contact me if you have any difficulty in running this code.
 akkus.zeynettin@mayo.edu
 Zeynettin Akkus
 
+Please cite the paper below if you use the tool in your study:
+1) Zeynettin Akkus, Petro M. Kostandy, Kenneth A. Philbrick, Bradley J. Erickson. Proceedings Volume 10574, Medical Imaging 2018: Image Processing; 1057420 (2018) https://doi.org/10.1117/12.2293423
