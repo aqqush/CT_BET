@@ -15,6 +15,7 @@ In order to extract brain from a CT head image.
 
 Please contact me if you have any difficulty in running this code.
 akkus.zeynettin@mayo.edu
+
 Zeynettin Akkus
 
 Please cite the paper below if you use the tool in your study:
