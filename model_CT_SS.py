@@ -562,7 +562,7 @@ class Unet_CT_SS(object):
             if self.testMetricFlag: 
                 self.saveTestMetrics(saveFolder,testLabels,predImage,each)
             if self.savePredMask:
-                predImage = nb.Nifti1Image(predImage[:,:,:,0].transpose(2,1,0), affine)
+                predImage = nb.Nifti1Image(predImage[:,:,:,0].transpose(1,2,0), affine)
                 nb.save(predImage, saveFolder+'/'+each)
         return
 
