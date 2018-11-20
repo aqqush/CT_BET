@@ -73,7 +73,7 @@ optimizer = 'adam'
 unetSS = genUnet(root_folder=code_dir, 
     image_folder = 'image_data',
     mask_folder = 'mask_data',
-    save_folder= code_dir+ resultsFolder +'/'+oLabel, 
+    save_folder= os.path.join(code_dir,resultsFolder,oLabel), 
     pred_folder=pred_folder,
     savePredMask=True,
     testLabelFlag=True,
