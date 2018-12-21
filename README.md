@@ -16,9 +16,11 @@ In order to extract brain from a CT head image.
 Additionals:
 ==========================================
 1)If you want to run the model on a new data without mask, you should set "testLabelFlag=False", which computes the DICE metric if you have masks in the mask_data folder.
+
 2)You should also download the model weights into the weights_folder as instructed in text file within the weights_folder.
 
 ==========================================
+
 Please contact me if you have any difficulty in running this code.
 
 Email: akkus.zeynettin@mayo.edu
