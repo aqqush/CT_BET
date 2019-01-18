@@ -157,10 +157,13 @@ class Unet_CT_SS(object):
     def loadTestData(self,images_path,labels_path, each):
         images = nb.load(os.path.join(images_path,each)).get_data()
         affine = nb.load(os.path.join(images_path,each)).get_affine()
-        labels = nb.load(os.path.join(labels_path,each)).get_data()
         [self.img_rows,self.img_cols,self.numImgs] = images.shape
         images = images.transpose(2,0,1).reshape(self.numImgs, self.img_rows,self.img_cols,1).astype(self.dtype)
-        labels = labels.transpose(2,0,1).reshape(self.numImgs, self.img_rows,self.img_cols,1).astype(self.dtypeL)
+        if self.testLabelFlag:
+            labels = nb.load(os.path.join(labels_path,each)).get_data()
+            labels = labels.transpose(2,0,1).reshape(self.numImgs, self.img_rows,self.img_cols,1).astype(self.dtypeL)
+        else:
+            labels = []
         return images,labels, affine
     
     def dice(self,trueL,predL):
