@@ -208,9 +208,9 @@ class Unet_CT_SS(object):
         return top_model
 
     def createModel3D(self,size):
-        if self.optimizer is 'adam':
+        if self.optimizer == 'adam':
             optimizer = Adam(lr = self.lr, decay=self.decay)
-        elif self.optimizer is 'SGD':
+        elif self.optimizer == 'SGD':
             optimizer = SGD(lr = self.lr, decay=self.decay)
             
         base_model = Unet3D((size[0],size[1],size[2],self.channel))
