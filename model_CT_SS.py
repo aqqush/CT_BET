@@ -604,7 +604,9 @@ class Unet_CT_SS(object):
             testImages, otestLabels,affine = self.load3DtestData(test_images_path,test_labels_path, each)
             oNumImgs=testImages.shape[2]
             testImages = interp3D(testImages,[0.25,0.25,1],cval=-1024)
+            testImages = arrange3DtestImage(testImages,48,self.dtype) 
             [numImgs,img_rows,img_cols,img_dep,ch] = testImages.shape
+            
             print('training image shape:',testImages.shape)
             if self.testLabelFlag:
                 testLabels = interp3D(otestLabels,[0.25,0.25,1],cval=0)
@@ -614,8 +616,7 @@ class Unet_CT_SS(object):
                 testLabels = testLabels.astype(self.dtype)
                 testLabels = arrange3DtestLabel(testLabels,48,self.dtype)
                 testLabels=testLabels.reshape((numImgs,img_rows,img_cols,img_dep,self.nb_classes))[0,:,:,:,self.sC-1:self.sC]
-                
-            testImages = arrange3DtestImage(testImages,48,self.dtype)           
+                          
            
             predImage = model.predict(testImages, batch_size=1, verbose=1)       
             print('-'*30)
