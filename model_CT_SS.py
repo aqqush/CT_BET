@@ -630,7 +630,7 @@ class Unet_CT_SS(object):
             print('test labels shape: ', predImage.shape)
             print(datetime.now() - startTime)
             
-            saveFolder = os.path.join(self.save_folder,self.pred_folder)
+            saveFolder = os.path.join(self.save_folder)
             
             if self.testLabelFlag:
                 self.computeTestMetrics(otestLabels,predImage) 
