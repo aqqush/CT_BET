@@ -24,8 +24,7 @@ from sklearn import metrics
 import nibabel as nb
 from sklearn.model_selection import KFold
 from keras.optimizers import Adam, SGD, RMSprop, Adadelta
-import SimpleITK as sitk
-from  scipy.ndimage.interpolation import zoom as interp3D
+from scipy.ndimage.interpolation import zoom as interp3D
 from load3Ddata import arrangeData as arrange3Ddata
 from load3Ddata import arrange3DtestImage,arrange3DtestLabel 
 
