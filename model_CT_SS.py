@@ -27,6 +27,7 @@ from keras.optimizers import Adam, SGD, RMSprop, Adadelta
 import SimpleITK as sitk
 from  scipy.ndimage.interpolation import zoom as interp3D
 from load3Ddata import arrangeData as arrange3Ddata
+from load3Ddata import arrange3DtestImage,arrange3DtestLabel 
 
 class Unet_CT_SS(object):
 
@@ -154,6 +155,21 @@ class Unet_CT_SS(object):
         [self.img_rows,self.img_cols,self.numImgs] = images.shape
         return images,labels, affine
     
+    def load3DtestData(self,images_path,labels_path, each):
+        images = nb.load(os.path.join(images_path,each)).get_data().astype('float32')
+        affine = nb.load(os.path.join(images_path,each)).get_affine()
+        if len(images.shape)>3:
+          images=images[:,:,:,0]
+
+        if self.testLabelFlag:
+            labels = nb.load(os.path.join(labels_path,each)).get_data().astype('uint8')
+            ind = np.where(labels>0)
+            labels[ind]=1
+        else:
+            labels = []
+        [self.img_rows,self.img_cols,self.numImgs] = images.shape
+        return images,labels, affine
+      
     def loadTestData(self,images_path,labels_path, each):
         images = nb.load(os.path.join(images_path,each)).get_data()
         affine = nb.load(os.path.join(images_path,each)).get_affine()
@@ -585,19 +601,22 @@ class Unet_CT_SS(object):
         for each in os.listdir(test_images_path):
             print('case: ', each)
             startTime = datetime.now()
-            testImages, otestLabels,affine = self.load3DtrainingData(test_images_path,test_labels_path, each)
+            testImages, otestLabels,affine = self.load3DtestData(test_images_path,test_labels_path, each)
             oNumImgs=testImages.shape[2]
             testImages = interp3D(testImages,[0.25,0.25,1],cval=-1024)
-            testLabels = interp3D(otestLabels,[0.25,0.25,1],cval=0)
-            testImages,testLabels = arrange3Ddata(testImages,testLabels,48,self.dtype)
             [numImgs,img_rows,img_cols,img_dep,ch] = testImages.shape
             print('training image shape:',testImages.shape)
-            testLabels=testLabels.reshape((numImgs,img_rows*img_cols*img_dep))
-            
-            testLabels = np_utils.to_categorical(testLabels, self.nb_classes)
-            testLabels = testLabels.reshape((numImgs,img_rows*img_cols*img_dep,1,self.nb_classes))
-            testLabels = testLabels.astype(self.dtype)
-
+            if self.testLabelFlag:
+                testLabels = interp3D(otestLabels,[0.25,0.25,1],cval=0)
+                testLabels=testLabels.reshape((numImgs,img_rows*img_cols*img_dep))
+                testLabels = np_utils.to_categorical(testLabels, self.nb_classes)
+                testLabels = testLabels.reshape((numImgs,img_rows*img_cols*img_dep,1,self.nb_classes))
+                testLabels = testLabels.astype(self.dtype)
+                testLabels = arrange3DtestLabel(testLabels,48,self.dtype)
+                testLabels=testLabels.reshape((numImgs,img_rows,img_cols,img_dep,self.nb_classes))[0,:,:,:,self.sC-1:self.sC]
+                
+            testImages = arrange3DtestImage(testImages,48,self.dtype)           
+           
             predImage = model.predict(testImages, batch_size=1, verbose=1)       
             print('-'*30)
             print('Predicting masks on test data...')
@@ -612,7 +631,7 @@ class Unet_CT_SS(object):
             print(datetime.now() - startTime)
             
             saveFolder = os.path.join(self.save_folder,self.pred_folder)
-            testLabels=testLabels.reshape((numImgs,img_rows,img_cols,img_dep,self.nb_classes))[0,:,:,:,self.sC-1:self.sC]
+            
             if self.testLabelFlag:
                 self.computeTestMetrics(otestLabels,predImage) 
             if self.testMetricFlag: 
