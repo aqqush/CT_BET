@@ -35,6 +35,24 @@ def arrangeData(images, labels, fold, dtype):
     images= images.reshape(1,img_rows,img_cols,fold,1).astype('float32')
     labels= labels.reshape(1,img_rows,img_cols,fold,1).astype('uint8')
     return images,labels
-  
+
+def arrange3DtestLabel(labels, fold, dtype):
+
+    [img_rows,img_cols,numImgs] = labels.shape
+    pad = np.zeros((img_rows,img_cols,fold-numImgs)) 
+    labels = np.concatenate((labels,pad), axis=2)
+    labels= labels.reshape(1,img_rows,img_cols,fold,1).astype('uint8')
+    return labels
+
+def arrange3DtestImage(images, fold, dtype):
+
+    [img_rows,img_cols,numImgs] = images.shape
+#    a=np.array([16,32,64,128,256])
+#    m = numImgs/(a*1.0)
+#    fold = int(a[1+np.where((m>=1) & (m<2))[0]])
+    pad = np.zeros((img_rows,img_cols,fold-numImgs)) 
+    images = np.concatenate((images,pad-1024), axis=2)
+    images= images.reshape(1,img_rows,img_cols,fold,1).astype('float32')
+    return images
   
   
