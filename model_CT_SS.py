@@ -564,7 +564,6 @@ class Unet_CT_SS(object):
             print('case: ', each);
             if each.startswith('.'):
                continue        
-               continue            
             testImages, testLabels, affine = self.loadTestData(test_images_path,test_labels_path, each)  
             predImage = model.predict(testImages, batch_size=8, verbose=1)       
             print('-'*30)
